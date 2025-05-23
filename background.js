@@ -7,17 +7,30 @@ let savedPicture;
 
 function prepareLogoImage() {
   const localLogo = new Image();
-  localLogo.src = './text_images/ons-logo.svg';
+  localLogo.src = './text_images/ons-logo-long.svg';
 
   localLogo.addEventListener('load', () => {
-    logo = localLogo;
-    const scale = 200 / logo.width;
-    logo.scaledW = scale * logo.width;
-    logo.scaledH = scale * logo.height;
-    c.drawImage(logo, 50, 50, logo.scaledW, logo.scaledH);
+    // 1) compute your scaled size
+    const scale   = 200 / localLogo.width;
+    const w       = localLogo.width  * scale;
+    const h       = localLogo.height * scale;
+    const x       = 50, y = 50;
+
+    // 2) draw the logo into the default "source-over" canvas
+    c.drawImage(localLogo, x, y, w, h);
+
+    // 3) switch to "source-in" so that only the pixels
+    //    inside the existing drawing will be painted
+    c.globalCompositeOperation = 'source-in';
+
+    // 4) paint a white rectangle over that same area
+    c.fillStyle = 'white';
+    c.fillRect(x, y, w, h);
+
+    // 5) go back to normal compositing
+    c.globalCompositeOperation = 'source-over';
   });
 }
-
 function init() {
   const canvas = document.querySelector('canvas');
   c = canvas.getContext('2d');
