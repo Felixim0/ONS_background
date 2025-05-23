@@ -1,0 +1,23 @@
+{
+  "name": "ons_background",
+  "version": "1.0.0",
+  "description": "The background for ONS digital has spheres and other iconography.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Felixim0/ONS_background.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Felixim0/ONS_background/issues"
+  },
+  "homepage": "https://github.com/Felixim0/ONS_background#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
