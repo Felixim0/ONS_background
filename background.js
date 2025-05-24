@@ -22,14 +22,22 @@ function drawBalls(ballsToDraw) {
   }
 }
 
-function moveBalls() {
-  return balls;
+function moveBalls(currentBalls) {
+  // Given pisition, size, colour, calcualte new position and return (drawing the balls is handled after)
+  const newBalls = [];
+  for (const ball of currentBalls) {
+    const { x, y, size, colour } = ball;
+    const newBall = { x, y, size, colour };
+    newBall.x = x + 1;
+
+    newBalls.push(newBall);
+  }
+  return newBalls;
 }
 
 function animate() {
   restoreCanvasPicture(c);
-  moveBalls();
-  drawBalls(balls);
+  balls = moveBalls(balls);
   saveCanvasPicture(c);
   drawBalls(balls);
 
@@ -52,11 +60,12 @@ function init() {
   prepareText(c);
   prepareLogo(c);
 
+  saveCanvasPicture(c);
+
   // Draw the starting balls
   balls = startingBalls
   drawBalls(balls);
 
-  saveCanvasPicture(c);
 
   animate();
 }
