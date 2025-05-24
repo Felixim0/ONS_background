@@ -1,12 +1,15 @@
 import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
 import { startingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
+import { breathingAnimation } from './animations/breathing.mjs';
 
 let c;
 let canvasH;
 let scale;
 let savedPicture;
 let balls = [];
+let modes = ['breathing', 'lavalamp', 'bouncing'];
+let currentMode = 0;
 
 function drawBall(ball) {
   const { x, y, size, colour } = ball;
@@ -22,26 +25,29 @@ function drawBalls(ballsToDraw) {
   }
 }
 
-function moveBalls(currentBalls) {
-  // Given pisition, size, colour, calcualte new position and return (drawing the balls is handled after)
-  const newBalls = [];
-  for (const ball of currentBalls) {
-    const { x, y, size, colour } = ball;
-    const newBall = { x, y, size, colour };
-    newBall.x = x + 1;
-
-    newBalls.push(newBall);
-  }
-  return newBalls;
-}
-
-function animate() {
+function animationLoop() {
+  // Given the animation mode, animate balls accordingly
+  const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
-  balls = moveBalls(balls);
+  if (currentModeName === 'breathing') {
+    // Update balls locations for breathing animation
+    balls = breathingAnimation(balls);
+  }
   saveCanvasPicture(c);
   drawBalls(balls);
 
-  window.requestAnimationFrame(animate);
+  window.requestAnimationFrame(animationLoop);
+}
+
+function setupListeners() {
+  document.addEventListener('keydown', function(e) {
+    // Modern browsers:
+    if (e.key === 'ArrowRight') {
+      console.log('Right arrow pressed!');
+      currentMode = (currentMode + 1) % modes.length;
+      console.log('Current mode:', modes[currentMode]);
+    }
+  });
 }
 
 function init() {
@@ -59,6 +65,8 @@ function init() {
   // Load and then draw the logo 
   prepareText(c);
   prepareLogo(c);
+  
+  setupListeners();
 
   saveCanvasPicture(c);
 
@@ -66,8 +74,7 @@ function init() {
   balls = startingBalls
   drawBalls(balls);
 
-
-  animate();
+  animationLoop();
 }
 
 
