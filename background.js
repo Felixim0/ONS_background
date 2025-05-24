@@ -12,6 +12,7 @@ let balls = [];
 let modes = ['breathing', 'lavalamp', 'bouncing'];
 let currentMode = 1;
 let animationSpeedMultiplier = 1;
+let PAUSED = false;
 
 function drawBall(ball) {
   const { x, y, size, colour } = ball;
@@ -40,14 +41,60 @@ function animationLoop() {
   window.requestAnimationFrame(animationLoop);
 }
 
+function updateControlPanel() {
+  document.querySelector('.mode-indicator').textContent = `${modes[currentMode]}`;
+  document.querySelector('.speed-indicator').textContent = `${animationSpeedMultiplier}`;
+  document.querySelector('.paused-indicator').textContent = `${PAUSED}`;
+}
+
+function toggleMode(direction) {
+  currentMode = (currentMode + direction) % modes.length;
+  console.log('Current mode:', modes[currentMode]);
+  updateControlPanel();
+}
+
+function togglePause() {
+  PAUSED = !PAUSED;
+}
+
 function setupListeners() {
   document.addEventListener('keydown', function(e) {
     const key = e.key || e.code;
+
     if (key === 'ArrowRight') {
-      console.log('Right arrow pressed!');
-      currentMode = (currentMode + 1) % modes.length;
-      console.log('Current mode:', modes[currentMode]);
+      // Toggle to right
+      toggleMode(1);
     }
+
+    if (key === 'ArrowLeft') {
+      // Toggle to Left
+      toggleMode(-1);
+    }
+
+    // Arrow up and down to increase/decrease speed
+    if (key === 'ArrowUp') {
+      // Increase speed
+      animationSpeedMultiplier += 0.1;
+      animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
+      console.log('Increased speed:', animationSpeedMultiplier);
+      updateControlPanel();
+    }
+    if (key === 'ArrowDown') {
+      // Decrease speed
+      animationSpeedMultiplier = Math.max(0.1, animationSpeedMultiplier - 0.1); // Prevent negative speed
+      animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
+      console.log('Decreased speed:', animationSpeedMultiplier);
+      updateControlPanel();
+    }
+
+    // If the key is the space bar, toggle pause
+    if (key === ' ') {
+      togglePause();
+      console.log('Paused:', PAUSED);
+      updateControlPanel();
+      return; // Prevent default space bar scrolling
+    }
+
     if (key === 'v' || key === 'V') {
       // Toggle Visibility of Control Panel
       toggleControlPanelVisibility();
@@ -79,6 +126,8 @@ function init() {
   balls = getStartingBalls();
   console.log('Starting balls:', balls);
   drawBalls(balls);
+
+  updateControlPanel();
 
   animationLoop();
 }
