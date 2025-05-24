@@ -9,7 +9,7 @@ export function prepareText(c) {
   localLogoText.addEventListener('load', () => {
     logoText = localLogoText;
     let scale = 200 / logoText.width;
-    scale = scale * 1.7 //Adjust the image to fit expected
+    scale = scale * 1.6 //Adjust the image to fit expected
     logoText.scaledW = scale * logoText.width;
     logoText.scaledH = scale * logoText.height;
     c.drawImage(logoText, 410, 0, logoText.scaledW, logoText.scaledH);
