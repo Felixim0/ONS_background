@@ -10,7 +10,7 @@ let savedPicture;
 let balls = [];
 let modes = ['breathing', 'lavalamp', 'bouncing'];
 let currentMode = 1;
-let animationSpeed = 0.53;
+let animationSpeedMultiplier = 1;
 
 function drawBall(ball) {
   const { x, y, size, colour } = ball;
@@ -31,7 +31,7 @@ function animationLoop() {
   const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
   if (currentModeName === 'breathing') {
-    balls = breathingAnimation(balls, animationSpeed);
+    balls = breathingAnimation(balls, animationSpeedMultiplier);
   }
   saveCanvasPicture(c);
   drawBalls(balls);
