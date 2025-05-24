@@ -12,9 +12,8 @@ const startingBalls = [
     // Top Right Balls 
     // Top Right Balls End
     {x: 730, y: 420, size: 320, colour: BALL_COLOURS[3], }, // bottom right ball
-    {x: 705, y: 255, size: 125, colour: BALL_COLOURS[2], }, // bottom right middle ball
     {x: 650, y: 205, size: 88, colour: BALL_COLOURS[0], }, // bottom right ball
-
+    {x: 705, y: 255, size: 125, colour: BALL_COLOURS[2], }, // bottom right yellow middle ball
   ]
  
 function drawBall(ball) {
