@@ -1,5 +1,5 @@
 import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
-import { startingBalls } from './helpers/setup_helpers.mjs';
+import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 import { breathingAnimation } from './animations/breathing.mjs';
 
@@ -9,7 +9,8 @@ let scale;
 let savedPicture;
 let balls = [];
 let modes = ['breathing', 'lavalamp', 'bouncing'];
-let currentMode = 0;
+let currentMode = 1;
+let animationSpeed = 0.53;
 
 function drawBall(ball) {
   const { x, y, size, colour } = ball;
@@ -30,8 +31,7 @@ function animationLoop() {
   const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
   if (currentModeName === 'breathing') {
-    // Update balls locations for breathing animation
-    balls = breathingAnimation(balls);
+    balls = breathingAnimation(balls, animationSpeed);
   }
   saveCanvasPicture(c);
   drawBalls(balls);
@@ -71,7 +71,8 @@ function init() {
   saveCanvasPicture(c);
 
   // Draw the starting balls
-  balls = startingBalls
+  balls = getStartingBalls();
+  console.log('Starting balls:', balls);
   drawBalls(balls);
 
   animationLoop();

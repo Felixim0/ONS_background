@@ -28,3 +28,12 @@ export const startingBalls = [
     {x: 705, y: 255, size: 125, colour: BALL_COLOURS[2], }, // bottom right yellow middle ball
   ]
  
+export function getStartingBalls() {
+  for (const ball of startingBalls) {
+    ball.originalX = ball.x;
+    ball.originalY = ball.y;
+    ball.originalSize = ball.size;
+    ball.movementState = {};
+  }
+  return startingBalls;
+}
