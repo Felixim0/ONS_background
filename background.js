@@ -1,9 +1,16 @@
 import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
-import { startingBalls } from './helpers/setup_helpers.mjs';
+import { getStartingBalls } from './helpers/setup_helpers.mjs';
+import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
+import { breathingAnimation } from './animations/breathing.mjs';
 
 let c;
 let canvasH;
 let scale;
+let savedPicture;
+let balls = [];
+let modes = ['breathing', 'lavalamp', 'bouncing'];
+let currentMode = 1;
+let animationSpeedMultiplier = 1;
 
 function drawBall(ball) {
   const { x, y, size, colour } = ball;
@@ -19,9 +26,33 @@ function drawBalls(ballsToDraw) {
   }
 }
 
+function animationLoop() {
+  // Given the animation mode, animate balls accordingly
+  const currentModeName = modes[currentMode];
+  restoreCanvasPicture(c);
+  if (currentModeName === 'breathing') {
+    balls = breathingAnimation(balls, animationSpeedMultiplier);
+  }
+  saveCanvasPicture(c);
+  drawBalls(balls);
+
+  window.requestAnimationFrame(animationLoop);
+}
+
+function setupListeners() {
+  document.addEventListener('keydown', function(e) {
+    // Modern browsers:
+    if (e.key === 'ArrowRight') {
+      console.log('Right arrow pressed!');
+      currentMode = (currentMode + 1) % modes.length;
+      console.log('Current mode:', modes[currentMode]);
+    }
+  });
+}
+
 function init() {
   const canvas = document.querySelector('canvas');
-  c = canvas.getContext('2d');
+  c = canvas.getContext('2d', { willReadFrequently: true });
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -31,15 +62,20 @@ function init() {
 
   canvasH = window.innerHeight / scale;
 
-  // Load and then draw the logo (white for each non-transparent pixel)
+  // Load and then draw the logo 
   prepareText(c);
   prepareLogo(c);
+  
+  setupListeners();
 
-  drawBalls(startingBalls);
+  saveCanvasPicture(c);
 
-//  saveCanvasPicture();
+  // Draw the starting balls
+  balls = getStartingBalls();
+  console.log('Starting balls:', balls);
+  drawBalls(balls);
 
-//  animate();
+  animationLoop();
 }
 
 
