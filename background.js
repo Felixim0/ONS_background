@@ -38,7 +38,7 @@ function animate() {
 
 function init() {
   const canvas = document.querySelector('canvas');
-  c = canvas.getContext('2d');
+  c = canvas.getContext('2d', { willReadFrequently: true });
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
