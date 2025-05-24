@@ -8,10 +8,11 @@ export function prepareText(c) {
 
   localLogoText.addEventListener('load', () => {
     logoText = localLogoText;
-    const scale = 200 / logoText.width;
+    let scale = 200 / logoText.width;
+    scale = scale * 1.7 //Adjust the image to fit expected
     logoText.scaledW = scale * logoText.width;
     logoText.scaledH = scale * logoText.height;
-    c.drawImage(logoText, 500, 6, logoText.scaledW, logoText.scaledH);
+    c.drawImage(logoText, 410, 0, logoText.scaledW, logoText.scaledH);
   });
 }
 
@@ -21,9 +22,10 @@ export function prepareLogo(c) {
 
   localLogo.addEventListener('load', () => {
     logo = localLogo;
-    const scale = 200 / logo.width;
+    let scale = 200 / logo.width;
+    scale = scale * 1.3 //Adjust the image to fit expected
     logo.scaledW = scale * logo.width;
     logo.scaledH = scale * logo.height;
-    c.drawImage(logo, 30, 14, logo.scaledW, logo.scaledH);
+    c.drawImage(logo, 30, 20, logo.scaledW, logo.scaledH);
   });
 }
