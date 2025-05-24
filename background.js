@@ -2,6 +2,7 @@ import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
 import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 import { breathingAnimation } from './animations/breathing.mjs';
+import { toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
 
 let c;
 let canvasH;
@@ -41,11 +42,15 @@ function animationLoop() {
 
 function setupListeners() {
   document.addEventListener('keydown', function(e) {
-    // Modern browsers:
-    if (e.key === 'ArrowRight') {
+    const key = e.key || e.code;
+    if (key === 'ArrowRight') {
       console.log('Right arrow pressed!');
       currentMode = (currentMode + 1) % modes.length;
       console.log('Current mode:', modes[currentMode]);
+    }
+    if (key === 'v' || key === 'V') {
+      // Toggle Visibility of Control Panel
+      toggleControlPanelVisibility();
     }
   });
 }
