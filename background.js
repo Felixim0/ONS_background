@@ -1,9 +1,12 @@
 import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
 import { startingBalls } from './helpers/setup_helpers.mjs';
+import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 
 let c;
 let canvasH;
 let scale;
+let savedPicture;
+let balls = [];
 
 function drawBall(ball) {
   const { x, y, size, colour } = ball;
@@ -19,6 +22,20 @@ function drawBalls(ballsToDraw) {
   }
 }
 
+function moveBalls() {
+  return balls;
+}
+
+function animate() {
+  restoreCanvasPicture(c);
+  moveBalls();
+  drawBalls(balls);
+  saveCanvasPicture(c);
+  drawBalls(balls);
+
+  window.requestAnimationFrame(animate);
+}
+
 function init() {
   const canvas = document.querySelector('canvas');
   c = canvas.getContext('2d');
@@ -31,15 +48,17 @@ function init() {
 
   canvasH = window.innerHeight / scale;
 
-  // Load and then draw the logo (white for each non-transparent pixel)
+  // Load and then draw the logo 
   prepareText(c);
   prepareLogo(c);
 
-  drawBalls(startingBalls);
+  // Draw the starting balls
+  balls = startingBalls
+  drawBalls(balls);
 
-//  saveCanvasPicture();
+  saveCanvasPicture(c);
 
-//  animate();
+  animate();
 }
 
 
