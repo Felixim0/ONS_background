@@ -2,7 +2,8 @@ import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
 import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 import { breathingAnimation } from './animations/breathing.mjs';
-import { toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
+import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
+import { drawBalls } from './helpers/ball_helpers.mjs';
 
 let c;
 let canvasH;
@@ -14,20 +15,6 @@ let currentMode = 1;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
 
-function drawBall(ball) {
-  const { x, y, size, colour } = ball;
-  c.fillStyle = colour;
-  c.beginPath();
-  c.ellipse(x, y, size / 2, size / 2, 0, 0, 7);
-  c.fill();
-}
-
-function drawBalls(ballsToDraw) {
- for (const ball of ballsToDraw) {
-    drawBall(ball);
-  }
-}
-
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
   const currentModeName = modes[currentMode];
@@ -36,7 +23,7 @@ function animationLoop() {
     balls = breathingAnimation(balls, animationSpeedMultiplier);
   }
   saveCanvasPicture(c);
-  drawBalls(balls);
+  drawBalls(c, balls);
 
   window.requestAnimationFrame(animationLoop);
 }
@@ -48,15 +35,7 @@ function updateControlPanel() {
 }
 
 function toggleMode(direction) {
-  const newMode = currentMode + direction;
-  if (newMode > modes.length - 1) {
-    currentMode = 0; // Wrap around to the first mode
-  } else if (newMode < 0) {
-    currentMode = modes.length - 1; // Wrap around to the last mode
-  } else {
-    currentMode = newMode; // Set to the new mode
-  }
-  console.log('Current mode:', modes[currentMode]);
+  currentMode = getNewMode(direction, currentMode, modes);
   updateControlPanel();
 }
 
@@ -132,7 +111,7 @@ function init() {
   // Draw the starting balls
   balls = getStartingBalls();
   console.log('Starting balls:', balls);
-  drawBalls(balls);
+  drawBalls(c, balls);
 
   updateControlPanel();
 
