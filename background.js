@@ -48,7 +48,14 @@ function updateControlPanel() {
 }
 
 function toggleMode(direction) {
-  currentMode = (currentMode + direction) % modes.length;
+  const newMode = currentMode + direction;
+  if (newMode > modes.length - 1) {
+    currentMode = 0; // Wrap around to the first mode
+  } else if (newMode < 0) {
+    currentMode = modes.length - 1; // Wrap around to the last mode
+  } else {
+    currentMode = newMode; // Set to the new mode
+  }
   console.log('Current mode:', modes[currentMode]);
   updateControlPanel();
 }
