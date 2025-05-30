@@ -63,8 +63,14 @@ function checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH) {
   const HEIGHT = canvasH;
   let a = newBall.movementState.bouncing.angle;
 
+  // Radius used to bounce off of edges - but if a ball is too big, then it CAN go out of bounds
+  let r = newBall.size / 2;
+  if (r > 100 ){
+    r = 0;
+  }
+
   // LEFT wall
-  if (newX < 0) {
+  if (newX - r < 0) {
     if (a > Math.PI/2 && a < Math.PI) {
       a = Math.abs((a - Math.PI/2 + Math.PI/2) - Math.PI);
     }
@@ -82,7 +88,7 @@ function checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH) {
     }
   }
   // RIGHT wall
-  else if (newX > WIDTH) {
+  else if (newX + r > WIDTH) {
     if (a > 3 * Math.PI/2 && a < 2 * Math.PI) {
       const angleT = a - 3 * Math.PI/2;
       const angleX = Math.abs(Math.PI - (angleT + Math.PI/2));
@@ -97,7 +103,7 @@ function checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH) {
     }
   }
   // TOP wall
-  else if (newY < 0) {
+  else if (newY - r < 0) {
     if (a > Math.PI && a < 3 * Math.PI/2) {
       const angleT = a - Math.PI;
       const angleX = Math.abs(Math.PI - (angleT + Math.PI/2));
@@ -113,7 +119,7 @@ function checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH) {
     }
   }
   // BOTTOM wall
-  else if (newY > HEIGHT) {
+  else if (newY + r > HEIGHT) {
     if (a > 0 && a < Math.PI/2) {
       a = 3 * Math.PI/2 + (Math.PI/2 - a);
     }
