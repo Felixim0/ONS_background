@@ -135,36 +135,13 @@ function checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH) {
   return assignBallNewPosition(newBall);
 }
 
-export function bouncingAnimation(
-  currentBalls,
-  animationSpeedMultiplier,
-  canvasW,
-  canvasH
-) {
+export function bouncingAnimation( currentBalls, animationSpeedMultiplier, canvasW, canvasH ) {
   const animationSpeed = baseAnimationSpeed * animationSpeedMultiplier;
   const newBalls = [];
 
   for (const ball of currentBalls) {
-    const {
-      x,
-      y,
-      size,
-      colour,
-      originalSize,
-      originalX,
-      originalY,
-      movementState
-    } = ball;
-    const newBall = {
-      x,
-      y,
-      size,
-      colour,
-      originalSize,
-      originalX,
-      originalY,
-      movementState
-    };
+    const { x, y, size, colour, originalSize, originalX, originalY, movementState } = ball;
+    const newBall = {x, y, size, colour, originalSize, originalX, originalY, movementState };
 
     if (!newBall.movementState.bouncing) {
       newBall.movementState.bouncing = { angle: 2, speed: animationSpeed };
