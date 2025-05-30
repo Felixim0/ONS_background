@@ -1,52 +1,101 @@
 import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
 import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
-import { breathingAnimation } from './animations/breathing.mjs';
+import { breathingAnimation } from './animations/breathing/breathing.mjs';
+import { bouncingAnimation } from './animations/bouncing/bouncing.mjs';
+import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
+import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 
 let c;
 let canvasH;
+let canvasW;
 let scale;
 let savedPicture;
 let balls = [];
 let modes = ['breathing', 'lavalamp', 'bouncing'];
-let currentMode = 1;
+let currentMode = 2;
 let animationSpeedMultiplier = 1;
-
-function drawBall(ball) {
-  const { x, y, size, colour } = ball;
-  c.fillStyle = colour;
-  c.beginPath();
-  c.ellipse(x, y, size / 2, size / 2, 0, 0, 7);
-  c.fill();
-}
-
-function drawBalls(ballsToDraw) {
- for (const ball of ballsToDraw) {
-    drawBall(ball);
-  }
-}
+let PAUSED = false;
 
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
   const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
+
   if (currentModeName === 'breathing') {
     balls = breathingAnimation(balls, animationSpeedMultiplier);
+  } else if (currentModeName === 'bouncing') {
+    balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
   }
-  saveCanvasPicture(c);
-  drawBalls(balls);
 
-  window.requestAnimationFrame(animationLoop);
+  // Ensure smaller balls are drawn on top of larger ones
+  balls = orderBallsBySize(balls);
+
+  saveCanvasPicture(c);
+  drawBalls(c, balls);
+
+  if (!PAUSED) {
+    window.requestAnimationFrame(animationLoop);
+  }
+}
+
+function updateControlPanel() {
+  document.querySelector('.mode-indicator').textContent = `${modes[currentMode]}`;
+  document.querySelector('.speed-indicator').textContent = `${animationSpeedMultiplier}`;
+  document.querySelector('.paused-indicator').textContent = `${PAUSED}`;
+}
+
+function toggleMode(direction) {
+  currentMode = getNewMode(direction, currentMode, modes);
+}
+
+function togglePause() {
+  PAUSED = !PAUSED;
+  if (!PAUSED) {
+    animationLoop(); // Restart the animation loop if unpaused
+  }
 }
 
 function setupListeners() {
   document.addEventListener('keydown', function(e) {
-    // Modern browsers:
-    if (e.key === 'ArrowRight') {
-      console.log('Right arrow pressed!');
-      currentMode = (currentMode + 1) % modes.length;
-      console.log('Current mode:', modes[currentMode]);
+    const key = e.key || e.code;
+
+    if (key === 'ArrowRight') {
+      // Toggle to right
+      toggleMode(1);
     }
+
+    if (key === 'ArrowLeft') {
+      // Toggle to Left
+      toggleMode(-1);
+    }
+
+    // Arrow up and down to increase/decrease speed
+    if (key === 'ArrowUp') {
+      // Increase speed
+      animationSpeedMultiplier += 0.1;
+      animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
+      console.log('Increased speed:', animationSpeedMultiplier);
+    }
+    if (key === 'ArrowDown') {
+      // Decrease speed
+      animationSpeedMultiplier = Math.max(0.1, animationSpeedMultiplier - 0.1); // Prevent negative speed
+      animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
+      console.log('Decreased speed:', animationSpeedMultiplier);
+    }
+
+    // If the key is the space bar, toggle pause
+    if (key === ' ') {
+      togglePause();
+      console.log('Paused:', PAUSED);
+    }
+
+    if (key === 'v' || key === 'V') {
+      // Toggle Visibility of Control Panel
+      toggleControlPanelVisibility();
+    }
+
+    updateControlPanel();
   });
 }
 
@@ -61,6 +110,7 @@ function init() {
   c.scale(scale, scale);
 
   canvasH = window.innerHeight / scale;
+  canvasW = window.innerWidth / scale;
 
   // Load and then draw the logo 
   prepareText(c);
@@ -73,7 +123,9 @@ function init() {
   // Draw the starting balls
   balls = getStartingBalls();
   console.log('Starting balls:', balls);
-  drawBalls(balls);
+  drawBalls(c, balls);
+
+  updateControlPanel();
 
   animationLoop();
 }

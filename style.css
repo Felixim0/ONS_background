@@ -13,3 +13,40 @@ body {
 canvas {
   display: block;
 }
+
+.hidden {
+  display: none !important;
+}
+
+.control-panel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.9);  /* slightly translucent white, tweak as you like */
+  border: 2px solid #000;             /* black border */
+  padding: 1rem 1.5rem;               /* space inside */
+  border-radius: 8px;                 /* rounded corners, optional */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;                        /* space between rows */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* subtle drop shadow */
+  z-index: 10;                        /* on top of canvas */
+}
+
+.control-panel .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-panel .title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.control-panel .value {
+  font-size: 1rem;
+  color: #333;
+}
