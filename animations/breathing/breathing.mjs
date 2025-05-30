@@ -3,12 +3,13 @@ let baseAnimationSpeed = 0.01
 export function breathingAnimation(currentBalls, animationSpeedMultiplier) {
   // Given pisition, size, colour, calcualte new position and return (drawing the balls is handled after)
   const newBalls = [];
+  const animationSpeed = baseAnimationSpeed * animationSpeedMultiplier; 
+
   for (const ball of currentBalls) {
     const { x, y, size, colour, originalSize, originalX, originalY, movementState} = ball;
     const newBall = { x, y, size, colour, originalSize, originalX, originalY, movementState };
     
     // Change newball values here
-    const animationSpeed = baseAnimationSpeed * animationSpeedMultiplier; 
     const biggerSize = size + animationSpeed;
     const smallerSize = size - animationSpeed;
     const maxSize = ball.originalSize * 1.2; 

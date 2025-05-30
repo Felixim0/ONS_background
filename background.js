@@ -1,17 +1,19 @@
 import { prepareLogo, prepareText } from './helpers/logo_helpers.mjs';
 import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
-import { breathingAnimation } from './animations/breathing.mjs';
+import { breathingAnimation } from './animations/breathing/breathing.mjs';
+import { bouncingAnimation } from './animations/bouncing/bouncing.mjs';
 import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
 import { drawBalls } from './helpers/ball_helpers.mjs';
 
 let c;
 let canvasH;
+let canvasW;
 let scale;
 let savedPicture;
 let balls = [];
 let modes = ['breathing', 'lavalamp', 'bouncing'];
-let currentMode = 1;
+let currentMode = 2;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
 
@@ -21,7 +23,10 @@ function animationLoop() {
   restoreCanvasPicture(c);
   if (currentModeName === 'breathing') {
     balls = breathingAnimation(balls, animationSpeedMultiplier);
+  } else if (currentModeName === 'bouncing') {
+    balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
   }
+
   saveCanvasPicture(c);
   drawBalls(c, balls);
 
@@ -101,6 +106,7 @@ function init() {
   c.scale(scale, scale);
 
   canvasH = window.innerHeight / scale;
+  canvasW = window.innerWidth / scale;
 
   // Load and then draw the logo 
   prepareText(c);
