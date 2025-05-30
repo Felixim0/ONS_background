@@ -12,3 +12,7 @@ export function drawBalls(c, ballsToDraw) {
    }
 }
 
+export function orderBallsBySize(balls) {
+  // Sort balls by size in descending order
+  return balls.sort((a, b) => b.size - a.size);
+}

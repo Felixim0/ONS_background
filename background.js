@@ -4,7 +4,7 @@ import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helper
 import { breathingAnimation } from './animations/breathing/breathing.mjs';
 import { bouncingAnimation } from './animations/bouncing/bouncing.mjs';
 import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
-import { drawBalls } from './helpers/ball_helpers.mjs';
+import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 
 let c;
 let canvasH;
@@ -21,11 +21,15 @@ function animationLoop() {
   // Given the animation mode, animate balls accordingly
   const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
+
   if (currentModeName === 'breathing') {
     balls = breathingAnimation(balls, animationSpeedMultiplier);
   } else if (currentModeName === 'bouncing') {
     balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
   }
+
+  // Ensure smaller balls are drawn on top of larger ones
+  balls = orderBallsBySize(balls);
 
   saveCanvasPicture(c);
   drawBalls(c, balls);

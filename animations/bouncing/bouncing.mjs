@@ -1,4 +1,4 @@
-let baseAnimationSpeed = 1;
+let baseAnimationSpeed = 0.1;
 
 // Utility: inclusive random integer [min…max]
 function randInt(min, max) {
