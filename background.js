@@ -25,7 +25,9 @@ function animationLoop() {
   saveCanvasPicture(c);
   drawBalls(c, balls);
 
-  window.requestAnimationFrame(animationLoop);
+  if (!PAUSED) {
+    window.requestAnimationFrame(animationLoop);
+  }
 }
 
 function updateControlPanel() {
@@ -36,11 +38,13 @@ function updateControlPanel() {
 
 function toggleMode(direction) {
   currentMode = getNewMode(direction, currentMode, modes);
-  updateControlPanel();
 }
 
 function togglePause() {
   PAUSED = !PAUSED;
+  if (!PAUSED) {
+    animationLoop(); // Restart the animation loop if unpaused
+  }
 }
 
 function setupListeners() {
@@ -63,28 +67,26 @@ function setupListeners() {
       animationSpeedMultiplier += 0.1;
       animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
       console.log('Increased speed:', animationSpeedMultiplier);
-      updateControlPanel();
     }
     if (key === 'ArrowDown') {
       // Decrease speed
       animationSpeedMultiplier = Math.max(0.1, animationSpeedMultiplier - 0.1); // Prevent negative speed
       animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
       console.log('Decreased speed:', animationSpeedMultiplier);
-      updateControlPanel();
     }
 
     // If the key is the space bar, toggle pause
     if (key === ' ') {
       togglePause();
       console.log('Paused:', PAUSED);
-      updateControlPanel();
-      return; // Prevent default space bar scrolling
     }
 
     if (key === 'v' || key === 'V') {
       // Toggle Visibility of Control Panel
       toggleControlPanelVisibility();
     }
+
+    updateControlPanel();
   });
 }
 
