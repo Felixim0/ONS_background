@@ -1,7 +1,7 @@
 import { checkCollitionWithWalls} from './collisionHelper.mjs';
 import { newXY } from './angleHelpers.mjs';
 
-let baseAnimationSpeed = 0.1;
+let baseAnimationSpeed = 0.5;
 
 export function bouncingAnimation( currentBalls, animationSpeedMultiplier, canvasW, canvasH ) {
   const animationSpeed = baseAnimationSpeed * animationSpeedMultiplier;

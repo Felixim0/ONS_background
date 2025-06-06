@@ -13,7 +13,7 @@ let scale;
 let savedPicture;
 let balls = [];
 let modes = ['breathing', 'lavalamp', 'bouncing'];
-let currentMode = 2;
+let currentMode = 1;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
 
