@@ -21,7 +21,7 @@ Setup OBS to use https://felixim0.github.io/ONS_background/ as a website backgro
 
 You can then use the "Interact" option in OBS to change the ball animations, speed, toggle the menu visiblity on or off.
 
-If you place the webcam input in OBS in the usual possition, then the UI should be hidden by your own picture, allowing you to see and update the balls live, without anyone seeing in teams/meet/etc.
+If you place the webcam input in OBS in the usual position, then the UI should be hidden by your own picture, allowing you to see and update the balls live, without anyone seeing in teams/meet/etc.
 
 
 ## TODO
