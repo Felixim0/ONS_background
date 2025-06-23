@@ -13,7 +13,7 @@ As part of a fun and whimsical side project I would like to animate them in orde
 
 4. Setup
 
-Use NVIDA Broadcast to "remove background" on your webcam.
+Use NVIDIA Broadcast to "remove background" on your webcam.
 
 Setup OBS to use your NVIDIA Broadcast camera output.
 
