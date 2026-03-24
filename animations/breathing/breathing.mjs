@@ -1,4 +1,4 @@
-let baseAnimationSpeed = 0.01
+let baseAnimationSpeed = 0.40
 
 export function breathingAnimation(currentBalls, animationSpeedMultiplier) {
   // Given pisition, size, colour, calcualte new position and return (drawing the balls is handled after)
@@ -12,7 +12,7 @@ export function breathingAnimation(currentBalls, animationSpeedMultiplier) {
     // Change newball values here
     const biggerSize = size + animationSpeed;
     const smallerSize = size - animationSpeed;
-    const maxSize = ball.originalSize * 1.2; 
+    const maxSize = ball.originalSize * 1.8; 
 
     if (!newBall.movementState.breathing) {
       // First time the ball is breathing, so add the default movement state
