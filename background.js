@@ -3,6 +3,7 @@ import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 import { breathingAnimation } from './animations/breathing/breathing.mjs';
 import { bouncingAnimation } from './animations/bouncing/bouncing.mjs';
+import { returnBallsAnimation, checkBallsInOriginalPosition } from './animations/returnToOriginalPosition/returnAnimation.mjs';
 import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
 import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 
@@ -16,16 +17,29 @@ let modes = ['breathing', 'lavalamp', 'bouncing'];
 let currentMode = 1;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
+let returnAnimation = false;
 
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
   const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
 
-  if (currentModeName === 'breathing') {
-    balls = breathingAnimation(balls, animationSpeedMultiplier);
-  } else if (currentModeName === 'bouncing') {
-    balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
+  if (returnAnimation) {
+    // Is the return ball animation finished? If so, reset returnAnimation status
+    const ballsReturnedToOriginalPositions = checkBallsInOriginalPosition(balls)
+    if (!ballsReturnedToOriginalPositions) {
+      balls = returnBallsAnimation(balls, animationSpeedMultiplier);
+    } else {
+      returnAnimation = false;
+      setPauseToTrue();
+    }
+
+  } else {
+    if (currentModeName === 'breathing') {
+      balls = breathingAnimation(balls, animationSpeedMultiplier);
+    } else if (currentModeName === 'bouncing') {
+      balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
+    } 
   }
 
   // Ensure smaller balls are drawn on top of larger ones
@@ -49,10 +63,20 @@ function toggleMode(direction) {
   currentMode = getNewMode(direction, currentMode, modes);
 }
 
+function setPauseToFalse() {
+  PAUSED = false;
+  animationLoop(); // Restart the animation loop
+}
+
+function setPauseToTrue() {
+  PAUSED = true;
+}
+
 function togglePause() {
-  PAUSED = !PAUSED;
-  if (!PAUSED) {
-    animationLoop(); // Restart the animation loop if unpaused
+  if (PAUSED) {
+    setPauseToFalse();
+  } else {
+    setPauseToTrue();
   }
 }
 
@@ -93,6 +117,12 @@ function setupListeners() {
     if (key === 'v' || key === 'V') {
       // Toggle Visibility of Control Panel
       toggleControlPanelVisibility();
+    }
+
+    if (key === 'r' || key === 'R') {
+      // Unpause the animation, set 'return animation' to true
+      returnAnimation = true;
+      setPauseToFalse();
     }
 
     updateControlPanel();
