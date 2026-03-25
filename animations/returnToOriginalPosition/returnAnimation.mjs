@@ -1,12 +1,12 @@
 let baseAnimationSpeed = 0.01
 
-export function checkBallsInOriginalPosition(currentBalls) {
+export function checkBallsInOriginalPositionAndSize(currentBalls) {
   for (const ball of currentBalls) {
-    if (ball.x !== ball.originalX || ball.y !== ball.originalY) {
-      return false; // If any ball is not in its original position, return false
+    if (ball.x !== ball.originalX || ball.y !== ball.originalY || ball.size !== ball.originalSize) {
+      return false; // If any ball is not in its original position or size, return false
     }
   }
-  return true; // All balls are in their original position
+  return true; // All balls are in their original position and  size
 }
 
 export function returnBallsAnimation(currentBalls, animationSpeedMultiplier) {
@@ -45,7 +45,7 @@ export function returnBallsAnimation(currentBalls, animationSpeedMultiplier) {
       newBallY = newBall.y + (deltaY * 0.1);
     }
 
-    if (Math.abs(deltaSize) <= 0.1) {
+    if (Math.abs(deltaSize) <= 0.5) {
       newBallSize = newBall.originalSize;
     } else {
       newBallSize = newBall.size + (deltaSize * 0.1);
