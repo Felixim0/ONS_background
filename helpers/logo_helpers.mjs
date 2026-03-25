@@ -3,9 +3,18 @@ let logo;
 let logoText;
 let savedPicture;
 
+const REPLACE_LOGO = false; // Set to false to use the default logo and text
+
+function getImageSrc(imagePath) {
+  if (REPLACE_LOGO) {
+    return `./text_images/portsmouth.png`;
+  }
+  return imagePath;
+}
+
 export function prepareText(c) {
   const localLogoText = new Image();
-  localLogoText.src = './text_images/digital_services.svg';
+  localLogoText.src = getImageSrc('./text_images/digital_services.svg');
 
   localLogoText.addEventListener('load', () => {
     logoText = localLogoText;
@@ -21,7 +30,7 @@ export function prepareText(c) {
 
 export function prepareLogo(c) {
   const localLogo = new Image();
-  localLogo.src = './text_images/ons_logo_white.svg';
+  localLogo.src = getImageSrc('./text_images/ons_logo_white.svg');
 
   localLogo.addEventListener('load', () => {
     logo = localLogo;
