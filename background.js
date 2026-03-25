@@ -3,7 +3,7 @@ import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 import { breathingAnimation } from './animations/breathing/breathing.mjs';
 import { bouncingAnimation } from './animations/bouncing/bouncing.mjs';
-import { returnBallsAnimation, checkBallsInOriginalPosition } from './animations/returnToOriginalPosition/returnAnimation.mjs';
+import { returnBallsAnimation, checkBallsInOriginalPositionAndSize } from './animations/returnToOriginalPosition/returnAnimation.mjs';
 import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
 import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 
@@ -26,7 +26,7 @@ function animationLoop() {
 
   if (returnAnimation) {
     // Is the return ball animation finished? If so, reset returnAnimation status
-    const ballsReturnedToOriginalPositions = checkBallsInOriginalPosition(balls)
+    const ballsReturnedToOriginalPositions = checkBallsInOriginalPositionAndSize(balls)
     if (!ballsReturnedToOriginalPositions) {
       balls = returnBallsAnimation(balls, animationSpeedMultiplier);
     } else {
