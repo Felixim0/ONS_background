@@ -3,9 +3,10 @@ import { getStartingBalls } from './helpers/setup_helpers.mjs';
 import { saveCanvasPicture, restoreCanvasPicture } from './helpers/canvas_helpers.mjs';
 import { breathingAnimation } from './animations/breathing/breathing.mjs';
 import { bouncingAnimation } from './animations/bouncing/bouncing.mjs';
-import { returnBallsAnimation, checkBallsInOriginalPositionAndSize } from './animations/returnToOriginalPosition/returnAnimation.mjs';
+import { consolidateBalls, returnBallsAnimation, checkBallsInOriginalPositionAndSize } from './animations/returnToOriginalPosition/returnAnimation.mjs';
 import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
 import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
+import { breakBalls } from './animations/breakBalls/breakBalls.mjs';
 
 let c;
 let canvasH;
@@ -18,11 +19,18 @@ let currentMode = 1;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
 let returnAnimation = false;
+let BREAK_BALLS = false;
 
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
   const currentModeName = modes[currentMode];
   restoreCanvasPicture(c);
+
+  // Check if the balls are breaking
+  if (BREAK_BALLS) {
+    balls = breakBalls(balls);
+    BREAK_BALLS = false;
+  }
 
   if (returnAnimation) {
     // Is the return ball animation finished? If so, reset returnAnimation status
@@ -31,6 +39,10 @@ function animationLoop() {
       balls = returnBallsAnimation(balls, animationSpeedMultiplier);
     } else {
       returnAnimation = false;
+
+      // If there are any extra balls, resolve these
+      balls = consolidateBalls(balls);
+
       setPauseToTrue();
     }
 
@@ -126,6 +138,11 @@ function setupListeners() {
       // Unpause the animation, set 'return animation' to true
       returnAnimation = true;
       setPauseToFalse();
+    }
+
+    if (key === 'b' || key === 'B') {
+      // Break Balls
+      BREAK_BALLS = true;
     }
 
     updateControlPanel();

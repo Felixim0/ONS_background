@@ -24,6 +24,7 @@ export function bouncingAnimation( currentBalls, animationSpeedMultiplier, canva
       checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH, randomnessMaxJitter )
     );
   }
+  console.log(newBalls);
 
   return newBalls;
 }
