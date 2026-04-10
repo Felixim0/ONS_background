@@ -1,4 +1,18 @@
+import { getStartingBalls } from "../../helpers/setup_helpers.mjs";
+
 let baseAnimationSpeed = 0.01
+
+export function consolidateBalls(currentBalls) {
+  const originalBalls = getStartingBalls();
+  const lengthOfOriginalBalls = originalBalls.length;
+  const lengthOfCurrentBalls = currentBalls.length;
+
+  // If there are more balls than original, return original
+  if (lengthOfCurrentBalls > lengthOfOriginalBalls) {
+    return originalBalls;
+  }
+  return currentBalls;
+}
 
 export function checkBallsInOriginalPositionAndSize(currentBalls) {
   for (const ball of currentBalls) {

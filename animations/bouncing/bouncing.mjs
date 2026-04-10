@@ -1,7 +1,7 @@
 import { checkCollitionWithWalls} from './collisionHelper.mjs';
 import { newXY } from './angleHelpers.mjs';
 
-let baseAnimationSpeed = 0.5;
+let baseAnimationSpeed = 0.9;
 
 export function bouncingAnimation( currentBalls, animationSpeedMultiplier, canvasW, canvasH ) {
   const animationSpeed = baseAnimationSpeed * animationSpeedMultiplier;
@@ -24,6 +24,7 @@ export function bouncingAnimation( currentBalls, animationSpeedMultiplier, canva
       checkCollitionWithWalls(newX, newY, newBall, canvasW, canvasH, randomnessMaxJitter )
     );
   }
+  console.log(newBalls);
 
   return newBalls;
 }
