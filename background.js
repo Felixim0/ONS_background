@@ -94,16 +94,19 @@ function setupListeners() {
       toggleMode(-1);
     }
 
+    // Get the step change based on the shift key being held down or not (0.1 if not, 1 if it is)
+    const step = e.shiftKey ? 1 : 0.1;
+
     // Arrow up and down to increase/decrease speed
     if (key === 'ArrowUp') {
       // Increase speed
-      animationSpeedMultiplier += 0.1;
+      animationSpeedMultiplier += step;
       animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
       console.log('Increased speed:', animationSpeedMultiplier);
     }
     if (key === 'ArrowDown') {
       // Decrease speed
-      animationSpeedMultiplier = Math.max(0.1, animationSpeedMultiplier - 0.1); // Prevent negative speed
+      animationSpeedMultiplier = Math.max(0.1, animationSpeedMultiplier - step); // Prevent negative speed
       animationSpeedMultiplier = Math.round(animationSpeedMultiplier * 100) / 100;
       console.log('Decreased speed:', animationSpeedMultiplier);
     }
