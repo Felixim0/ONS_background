@@ -10,8 +10,18 @@ export function breathingAnimation(currentBalls, animationSpeedMultiplier) {
     const newBall = { x, y, size, colour, originalSize, originalX, originalY, movementState };
     
     // Change newball values here
-    const biggerSize = size + animationSpeed;
-    const smallerSize = size - animationSpeed;
+    
+    // Calculate size based on ball original size, so that speed of breathing
+    // is linked to the size of the ball - Smaller balls should breath at the SAME SPEED
+    // as the bigger balls, so the change in size should be smaller for smaller balls and bigger for bigger balls
+
+    const referenceSize = 20; 
+    const speedForThisBall = animationSpeed * Math.pow(newBall.originalSize / referenceSize, 0.5);
+
+    const biggerSize = size + speedForThisBall;
+    const smallerSize = size - speedForThisBall;
+
+    // Biggest a ball can breathe to (smallest is it's original size)
     const maxSize = ball.originalSize * 1.8; 
 
     if (!newBall.movementState.breathing) {
