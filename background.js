@@ -8,7 +8,6 @@ import { getNewMode, toggleControlPanelVisibility } from './helpers/control_pane
 import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 import { breakBalls } from './animations/breakBalls/breakBalls.mjs';
 import { createCameraCutoutController } from './helpers/camera_cutout_helpers.mjs';
-import { bounceAwareAnimation } from './animations/bounceAware/bounceAware.mjs';
 
 let c;
 let canvasH;
@@ -16,7 +15,7 @@ let canvasW;
 let scale;
 let savedPicture;
 let balls = [];
-let modes = ['breathing', 'lavalamp', 'bouncing', 'bounce-aware'];
+let modes = ['breathing', 'lavalamp', 'bouncing'];
 let currentMode = 1;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
@@ -54,8 +53,6 @@ function animationLoop() {
       balls = breathingAnimation(balls, animationSpeedMultiplier);
     } else if (currentModeName === 'bouncing') {
       balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
-    } else if (currentModeName === 'bounce-aware') {
-      balls = bounceAwareAnimation(balls, animationSpeedMultiplier, canvasW, canvasH, c, scale);
     } 
   }
 

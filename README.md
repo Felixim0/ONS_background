@@ -13,6 +13,21 @@ As part of a fun and whimsical side project I would like to animate them in orde
 
 4. The page can now be used directly as a browser camera scene (no NVIDIA Broadcast required).
 
+5. Use OBS LAUNCH WITH --use-fake-ui-for-media-stream  to capture browser window and use as camera input
+
+## Tests
+
+Run the automated test suite locally with:
+
+```bash
+npm install
+npm test
+```
+
+The test suite uses Node's built-in test runner, so no extra test framework is required.
+
+GitHub Actions also runs the same tests automatically on every push and pull request.
+
 ## Browser notes
 
 * Camera access requires HTTPS or localhost.
