@@ -8,7 +8,6 @@ import { getNewMode, toggleControlPanelVisibility } from './helpers/control_pane
 import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 import { breakBalls } from './animations/breakBalls/breakBalls.mjs';
 import { createCameraCutoutController } from './helpers/camera_cutout_helpers.mjs';
-import { bounceAwareAnimation } from './animations/bounceAware/bounceAware.mjs';
 
 let c;
 let canvasH;
@@ -16,13 +15,16 @@ let canvasW;
 let scale;
 let savedPicture;
 let balls = [];
-let modes = ['breathing', 'lavalamp', 'bouncing', 'bounce-aware'];
+let modes = ['breathing', 'lavalamp', 'bouncing'];
 let currentMode = 1;
 let animationSpeedMultiplier = 1;
 let PAUSED = false;
 let returnAnimation = false;
 let BREAK_BALLS = false;
 let cameraController;
+let lastModeToggleMs = 0;
+
+const MODE_TOGGLE_COOLDOWN_MS = 180;
 
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
@@ -54,8 +56,6 @@ function animationLoop() {
       balls = breathingAnimation(balls, animationSpeedMultiplier);
     } else if (currentModeName === 'bouncing') {
       balls = bouncingAnimation(balls, animationSpeedMultiplier, canvasW, canvasH);
-    } else if (currentModeName === 'bounce-aware') {
-      balls = bounceAwareAnimation(balls, animationSpeedMultiplier, canvasW, canvasH, c, scale);
     } 
   }
 
@@ -81,6 +81,15 @@ function toggleMode(direction) {
   currentMode = getNewMode(direction, currentMode, modes);
 }
 
+function shouldToggleMode(nowMs) {
+  if (nowMs - lastModeToggleMs < MODE_TOGGLE_COOLDOWN_MS) {
+    return false;
+  }
+
+  lastModeToggleMs = nowMs;
+  return true;
+}
+
 function setPauseToFalse() {
   PAUSED = false;
   updateControlPanel();
@@ -103,15 +112,20 @@ function togglePause() {
 function setupListeners() {
   document.addEventListener('keydown', function(e) {
     const key = e.key || e.code;
+    const nowMs = Date.now();
 
     if (key === 'ArrowRight') {
       // Toggle to right
-      toggleMode(1);
+      if (shouldToggleMode(nowMs)) {
+        toggleMode(1);
+      }
     }
 
     if (key === 'ArrowLeft') {
       // Toggle to Left
-      toggleMode(-1);
+      if (shouldToggleMode(nowMs)) {
+        toggleMode(-1);
+      }
     }
 
     // Get the step change based on the shift key being held down or not (0.1 if not, 1 if it is)
