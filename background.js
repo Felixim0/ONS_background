@@ -22,6 +22,9 @@ let PAUSED = false;
 let returnAnimation = false;
 let BREAK_BALLS = false;
 let cameraController;
+let lastModeToggleMs = 0;
+
+const MODE_TOGGLE_COOLDOWN_MS = 180;
 
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
@@ -78,6 +81,15 @@ function toggleMode(direction) {
   currentMode = getNewMode(direction, currentMode, modes);
 }
 
+function shouldToggleMode(nowMs) {
+  if (nowMs - lastModeToggleMs < MODE_TOGGLE_COOLDOWN_MS) {
+    return false;
+  }
+
+  lastModeToggleMs = nowMs;
+  return true;
+}
+
 function setPauseToFalse() {
   PAUSED = false;
   updateControlPanel();
@@ -100,15 +112,20 @@ function togglePause() {
 function setupListeners() {
   document.addEventListener('keydown', function(e) {
     const key = e.key || e.code;
+    const nowMs = Date.now();
 
     if (key === 'ArrowRight') {
       // Toggle to right
-      toggleMode(1);
+      if (shouldToggleMode(nowMs)) {
+        toggleMode(1);
+      }
     }
 
     if (key === 'ArrowLeft') {
       // Toggle to Left
-      toggleMode(-1);
+      if (shouldToggleMode(nowMs)) {
+        toggleMode(-1);
+      }
     }
 
     // Get the step change based on the shift key being held down or not (0.1 if not, 1 if it is)
