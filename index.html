@@ -4,6 +4,8 @@
 <link rel="icon" type="image/png" href="favicon.ico">
 
 <canvas width="800" height="800"></canvas>
+<video class="camera-source hidden" autoplay playsinline muted></video>
+<canvas class="camera-cutout hidden"></canvas>
 
 <div class="control-panel">
   <div class="row">
@@ -16,6 +18,9 @@
     <h3 class="title">Paused:</h3><h4 class="value paused-indicator"></h4>
   </div>
   <div class="row">
+    <h3 class="title">Camera:</h3><h4 class="value camera-indicator">off</h4>
+  </div>
+  <div class="row">
     <h3 class="title"></h3>'v' toggle control panel<h4 class="value"></h4>
   </div>
   <div class="row">
@@ -25,6 +30,9 @@
     <h3 class="title"></h3>'r' reset balls<h4 class="value"></h4>
   </div>
   <div class="row">
+    <h3 class="title"></h3>'c' toggle camera bg remove<h4 class="value"></h4>
+  </div>
+  <div class="row">
     <h3 class="title"></h3>Up/down arrow change speed (+shift!)<h4 class="value"></h4>
   </div>
 
@@ -32,4 +40,5 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
 <script src="background.js" type="module"></script>

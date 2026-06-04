@@ -7,6 +7,7 @@ import { consolidateBalls, returnBallsAnimation, checkBallsInOriginalPositionAnd
 import { getNewMode, toggleControlPanelVisibility } from './helpers/control_panel_helpers.mjs';
 import { drawBalls, orderBallsBySize } from './helpers/ball_helpers.mjs';
 import { breakBalls } from './animations/breakBalls/breakBalls.mjs';
+import { createCameraCutoutController } from './helpers/camera_cutout_helpers.mjs';
 
 let c;
 let canvasH;
@@ -20,6 +21,7 @@ let animationSpeedMultiplier = 1;
 let PAUSED = false;
 let returnAnimation = false;
 let BREAK_BALLS = false;
+let cameraController;
 
 function animationLoop() {
   // Given the animation mode, animate balls accordingly
@@ -69,6 +71,7 @@ function updateControlPanel() {
   document.querySelector('.mode-indicator').textContent = `${modes[currentMode]}`;
   document.querySelector('.speed-indicator').textContent = `${animationSpeedMultiplier}`;
   document.querySelector('.paused-indicator').textContent = `${PAUSED}`;
+  document.querySelector('.camera-indicator').textContent = cameraController?.getStatus?.() || 'off';
 }
 
 function toggleMode(direction) {
@@ -77,11 +80,13 @@ function toggleMode(direction) {
 
 function setPauseToFalse() {
   PAUSED = false;
+  updateControlPanel();
   animationLoop(); // Restart the animation loop
 }
 
 function setPauseToTrue() {
   PAUSED = true;
+  updateControlPanel();
 }
 
 function togglePause() {
@@ -145,6 +150,10 @@ function setupListeners() {
       BREAK_BALLS = true;
     }
 
+    if (key === 'c' || key === 'C') {
+      cameraController.toggle();
+    }
+
     updateControlPanel();
   });
 }
@@ -152,9 +161,16 @@ function setupListeners() {
 function init() {
   const canvas = document.querySelector('canvas');
   c = canvas.getContext('2d', { willReadFrequently: true });
+  cameraController = createCameraCutoutController({
+    videoSelector: '.camera-source',
+    canvasSelector: '.camera-cutout',
+    onStateChange: updateControlPanel,
+  });
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  cameraController.resize();
+  window.addEventListener('resize', () => cameraController.resize());
 
   scale = window.innerWidth / 800;
   c.scale(scale, scale);
