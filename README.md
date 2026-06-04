@@ -7,11 +7,25 @@ As part of a fun and whimsical side project I would like to animate them in orde
 
 1. [Visit the ONS Background site here](https://felixim0.github.io/ONS_background/)
 
-2. [Download OBS](https://obsproject.com/download)
+2. Press c to toggle the webcam cutout mode on and off.
 
-3. [Download NVIDIA Broadcast](https://www.nvidia.com/en-gb/geforce/broadcasting/broadcast-app/)
+3. When enabled, the browser asks for camera permission and removes your background in real time.
 
-4. Setup
+4. The page can now be used directly as a browser camera scene (no NVIDIA Broadcast required).
+
+## Browser notes
+
+* Camera access requires HTTPS or localhost.
+* Works best in modern Chromium, Firefox, and Safari versions.
+* If camera does not start, check browser camera permissions and refresh.
+
+## Legacy setup (optional)
+
+1. [Download OBS](https://obsproject.com/download)
+
+2. [Download NVIDIA Broadcast](https://www.nvidia.com/en-gb/geforce/broadcasting/broadcast-app/)
+
+3. Setup
 
 Use NVIDIA Broadcast to "remove background" on your webcam.
 
